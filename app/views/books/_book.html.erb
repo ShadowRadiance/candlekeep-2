@@ -1,0 +1,20 @@
+<div class="book col-md-6 p-1">
+
+  <div class="list-group">
+
+    <div class="list-group-item list-group-item-action">
+
+      <%= link_to book_path(book), class: 'd-flex justify-content-between align-items-center' do %>
+        <%= book.title %>
+        <span class="badge badge-dark badge-pill"><%= book.copies.count %> copies</span>
+      <% end %>
+
+      <p class="text-muted"><%= book.author || 'Author Unknown' %></p>
+      
+    </div>
+
+  </div>
+
+</div>
+
+
