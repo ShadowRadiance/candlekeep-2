@@ -6,7 +6,11 @@
 
       <%= link_to book_path(book), class: 'd-flex justify-content-between align-items-center' do %>
         <%= book.title %>
-        <span class="badge badge-dark badge-pill"><%= book.copies.count %> copies</span>
+        <span class="badge badge-dark badge-pill">
+          <%= book.copies.available.count %>
+          /
+          <%= pluralize(book.copies.count, 'copy') %>
+        </span>
       <% end %>
 
       <p class="text-muted"><%= book.author || 'Author Unknown' %></p>
