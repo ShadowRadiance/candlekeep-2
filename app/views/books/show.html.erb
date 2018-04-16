@@ -1,0 +1,15 @@
+<%= link_to 'Return to library', books_path %>
+
+<div class="books row">
+
+    <%= render @book %>
+
+    <div class="col-md-6">
+      <h2>Copies</h2>
+      <% @book.copies.each do |copy| %>
+        <div>
+          Copy: <%= copy.location %>
+        </div>
+      <% end %>
+    </div>
+</div>
