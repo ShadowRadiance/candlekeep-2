@@ -1,6 +1,26 @@
 class CheckoutsController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    @checkouts = Checkout.active.where(user: current_user)
+    render 'user_index'
+  end
+
+  def admin_index
+    require_admin!
+
+    checkouts = Checkout.active
+    @checkouts_by_user_id = {}
+    checkouts.each do |checkout|
+      @checkouts_by_user_id[checkout.user.id] ||= {
+        user: checkout.user,
+        checkouts: []
+      }
+      @checkouts_by_user_id[checkout.user.id][:checkouts] << checkout
+    end
+    render 'admin_index'
+  end
+
   def create
     book = Book.find(params[:book_id])
     checkout_copy(acquire_copy(book))
@@ -9,6 +29,15 @@ class CheckoutsController < ApplicationController
     redirect_back fallback_location: books_path, alert: e.message
   end
 
+  def destroy
+    checkout = Checkout.find(params[:id])
+    checkout.update(checked_in_at: Time.current)
+    if checkout.valid?
+      redirect_back fallback_location: checkouts_path, notice: 'Thanks for returning the book'
+    else
+      redirect_back fallback_location: checkouts_path, alert: checkout.errors.full_messages.to_sentence
+    end
+  end
 
   private
 
@@ -26,5 +55,4 @@ class CheckoutsController < ApplicationController
     raise checkout.errors.full_messages.to_sentence unless checkout.valid?
     checkout
   end
-
 end

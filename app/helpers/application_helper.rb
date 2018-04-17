@@ -29,13 +29,20 @@ module ApplicationHelper
       time: "Local: #{Time.current.in_time_zone(user.time_zone).to_s(:long)}",
       dropdown: {
         type: 'Member',
-        name: current_user.email,
+        name: user.email,
         links: [
+          link_to('My Checkouts', checkouts_path, class: 'dropdown-item'),
           link_to('Edit profile', edit_user_registration_path, class: 'dropdown-item'),
           link_to('Logout', destroy_user_session_path, method: :delete, class: 'dropdown-item')
         ]
       }
-    }
+    }.tap do |hsh|
+      if user.is_admin?
+        hsh[:dropdown][:links].unshift(
+          link_to('All Checkouts', admin_index_checkouts_path, class: 'dropdown-item')
+        )
+      end
+    end
   end
 
   def guest_nav
