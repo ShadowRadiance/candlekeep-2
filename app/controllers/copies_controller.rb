@@ -1,4 +1,7 @@
 class CopiesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_admin!
+
   def create
     @book = Book.find(params[:book_id])
     @copy = @book.copies.create
