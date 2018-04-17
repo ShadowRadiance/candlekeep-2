@@ -1,0 +1,19 @@
+<h1>You have overdue books at Candlekeep.</h1>
+
+<p>You have the following books at Candlekeep that are currently overdue!</p>
+
+<ul>
+<% @checkouts.each do |checkout| %>
+  <li>
+    <%= checkout.copy.book.title %>
+    (due: <%= checkout.due_at.in_time_zone(@user.time_zone).to_s(:long) %> )
+  </li>
+<% end %>
+</ul>
+
+<p>Please return them. It would be a <em>shame</em> if we had to send the monks.</p>
+
+<p>Many thanks,</p>
+
+<p>The Seer</p>
+
