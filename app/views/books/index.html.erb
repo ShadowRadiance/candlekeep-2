@@ -1,5 +1,9 @@
 <h2>Books</h2>
 
+<%= link_to new_book_path, class: 'btn btn-primary' do %>
+    Create New Book
+<% end if current_user&.is_admin? %>
+
 <div class="books row">
 
   <%= render @books %>

@@ -12,17 +12,17 @@
 
   <body>
     <%= render partial: 'navbar' %>
+    
     <div class="container">
-      <% flash.each do |name, msg| %>
-        <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
-          <%= msg  %>
-        </div>
-      <% end %>
+      
+      <%= render partial: 'flashes' %>
+      
       <div class="row">
         <div class="col-12 py-md-3">
           <%= yield %>
         </div>
       </div>
+      
     </div>
   </body>
 </html>

@@ -3,6 +3,12 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
-  resources :books
+  resources :books do
+    resources :copies, only: [:create, :destroy] do
+      member do
+        post :restore
+      end
+    end
+  end
 
 end
