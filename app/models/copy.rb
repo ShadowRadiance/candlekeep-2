@@ -17,4 +17,8 @@ class Copy < ApplicationRecord
       'checked out'
     end
   end
+
+  def current_borrower
+    checkouts.first&.user
+  end
 end

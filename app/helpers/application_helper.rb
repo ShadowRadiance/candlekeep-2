@@ -51,4 +51,16 @@ module ApplicationHelper
       }
     }
   end
+
+  def copy_location(copy, user)
+    return copy.location unless user&.is_admin?
+    return copy.location unless copy.current_borrower
+
+    copy.current_borrower.email
+
+    # link_to(
+    #   copy.current_borrower.email,
+    #   user_checkouts_path(copy.current_borrower)
+    # ).html_safe
+  end
 end

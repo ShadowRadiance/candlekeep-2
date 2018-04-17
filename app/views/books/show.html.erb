@@ -12,7 +12,9 @@
 
       <% @book.copies.each do |copy| %>
         <div class="d-flex justify-content-between align-items-center">
-          <span>Copy: <%= copy.location %></span>
+          <span>
+            Copy: <%= copy_location(copy, current_user) %>
+          </span>
           <%= link_to book_copy_path(@book, copy),
                       method: :delete,
                       data: { confirm: 'Are you sure?' } do %>
