@@ -1,6 +1,8 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
+  # is_admin
+  # time_zone
+
+  # Include default devise modules. Others available are: :lockable, :timeoutable and :omniauthable
   devise :confirmable,
          :database_authenticatable,
          :registerable,
@@ -8,6 +10,8 @@ class User < ApplicationRecord
          :rememberable,
          :trackable,
          :validatable
+
+  has_many :checkouts
 
   # after create/update/delete ensure there is always an admin
   after_commit :ensure_admin

@@ -1,0 +1,13 @@
+<h3>Active Checkouts</h3>
+
+<% @checkouts_by_user_id.each do |_, hash| %>
+  <div class="card card-body">
+    <h4>User: <%= hash[:user].email %></h4>
+
+    <%= render partial: 'checkouts_for_user',
+               locals: { user: hash[:user],
+                         checkouts: hash[:checkouts],
+                         display: :admin } %>
+
+  </div>
+<% end %>

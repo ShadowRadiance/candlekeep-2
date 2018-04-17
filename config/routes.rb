@@ -11,4 +11,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :checkouts, only: [:index, :create, :destroy] do
+    collection do
+      get :admin_index
+    end
+  end
+
 end

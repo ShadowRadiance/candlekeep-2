@@ -1,0 +1,18 @@
+<tr>
+  <th scope="row" class="text-nowrap">
+    <%= checkout.copy.book.title %>
+  </th>
+  <td class="text-nowrap">
+    <%= checkout.checked_out_at.in_time_zone(checkout.user.time_zone) %>
+  </td>
+  <td class="text-nowrap">
+    <%= checkout.due_at.in_time_zone(checkout.user.time_zone) %>
+  </td>
+  <% if checkout.user==current_user && display==:user %>
+    <td class="text-nowrap">
+      <%= button_to 'Return', checkout_path(checkout),
+                    method: :delete,
+                    class: 'btn btn-primary btn-sm text-right'%>
+    </td>
+  <% end %>
+</tr>

@@ -14,12 +14,26 @@
       <% end %>
 
       <p class="text-muted"><%= book.author || 'Author Unknown' %></p>
-      
+
+      <% unless current_user.nil? %>
+        <div class="text-right">
+          <% if book.copies.available.count.zero? %>
+            Out of Copies
+          <% else %>
+            <%= button_to 'Borrow', checkouts_path,
+                          params: {book_id: book.id},
+                          method: :post,
+                          class: 'btn btn-primary btn-sm text-right'%>
+          <% end %>
+        </div>
+      <% end %>
+
+
     </div>
 
     <% if current_user&.is_admin? %>
-      <div class="list-group-item text-right">
-        <%= link_to 'Edit', edit_book_path(book) %>
+      <div class="list-group-item text-right"> Admin Only:
+        <%= link_to 'Edit this Book', edit_book_path(book) %>
       </div>
     <% end %>
 
