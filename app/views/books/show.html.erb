@@ -2,7 +2,7 @@
 
 <div class="books row">
 
-    <%= render @book %>
+    <%= render partial: 'book', object: @book, locals: {mode: :display} %>
 
     <div class="col-md-6">
       <h2>Copies</h2>

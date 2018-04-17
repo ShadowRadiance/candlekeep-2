@@ -70,4 +70,9 @@ module ApplicationHelper
     #   user_checkouts_path(copy.current_borrower)
     # ).html_safe
   end
+
+  def wrap_parens(str)
+    return '' if str.to_s.blank?
+    "(#{str.to_s.titleize.strip})"
+  end
 end

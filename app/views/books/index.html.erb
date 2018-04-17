@@ -6,6 +6,6 @@
 
 <div class="books row">
 
-  <%= render @books %>
+  <%= render partial: 'book', collection: @books, locals: {mode: :list} %>
 
 </div>

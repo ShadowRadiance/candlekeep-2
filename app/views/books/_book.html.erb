@@ -5,15 +5,26 @@
     <div class="list-group-item list-group-item-action">
 
       <%= link_to book_path(book), class: 'd-flex justify-content-between align-items-center' do %>
+
         <%= book.title %>
+
         <span class="badge badge-dark badge-pill">
           <%= book.copies.available.count %>
           /
           <%= pluralize(book.copies.count, 'copy') %>
         </span>
+
       <% end %>
 
-      <p class="text-muted"><%= book.author || 'Author Unknown' %></p>
+      <p class="text-muted"><%= book.author.blank? ? 'Author Unknown' : book.author %></p>
+
+      <% if mode==:display %>
+        <p class="card-text">Published by <%= book.publisher.blank? ? '(Unknown)' : book.publisher %></p>
+
+        <p class="card-text"><%= book.genre.titleize %> <%= wrap_parens(book.subgenre) %></p>
+
+        <p class="card-text"><%= book.pages %> pages</p>
+      <% end %>
 
       <% unless current_user.nil? %>
         <div class="text-right">
