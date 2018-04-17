@@ -1,4 +1,33 @@
-<h2>Hello World</h2>
-<p>
-  The time is now: <%= Time.current %>
-</p>
+<div class="jumbotron">
+  <h1 class="display-4">Welcome to the Library at Candlekeep!</h1>
+  <p class="lead">
+    Here at Candlekeep we keep a large library of books available to be checked
+    out, IF you are a registered user. Guests may browse the library but not
+    check books out.
+  </p>
+  <hr class="my-4">
+  <p>
+    Periodicals do not circulate.
+  </p>
+
+  <div class="row">
+    <div class="col-auto mr-auto">
+      <%= link_to books_path, class: 'btn btn-primary btn-lg' do %>
+        Browse the library
+      <% end %>
+    </div>
+    <% unless current_user %>
+      <div class="col-auto">
+      <%= link_to new_user_registration_path, class: 'btn btn-primary btn-lg' do %>
+        Sign Up
+      <% end %>
+      or
+      <%= link_to new_user_session_path, class: 'btn btn-primary btn-lg' do %>
+        Log In
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+
