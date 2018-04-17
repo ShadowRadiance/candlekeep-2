@@ -31,6 +31,15 @@ Once you have signed up, you can email me for admin access.
 
 ## Development Setup
 
+    Ruby: 2.4+
+    Rails: 5.2
+    PostgreSQL: 10.3
+
+I use a locally installed Postgres 10 database for local development, but a dockerized one should work just fine. 
+You may have to override the connection information - which you can do by setting an environment variable called DATABASE_URL. 
+If you have both config/database.yml and ENV['DATABASE_URL'] set then Rails will merge the configuration together automatically.
+See http://guides.rubyonrails.org/configuring.html#connection-preference
+
 ### Importing CSV Data
 
 **Important**: importing data removes and replaces all books in the system.
