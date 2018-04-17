@@ -1,4 +1,5 @@
 class Copy < ApplicationRecord
+  # destroyed_at
   belongs_to :book
 
   # faking the available scope for now since we don't have checkouts yet

@@ -6,10 +6,45 @@
 
     <div class="col-md-6">
       <h2>Copies</h2>
+      <%= link_to book_copies_path(@book), method: :post do %>
+        Add Copy
+      <% end if current_user&.is_admin? %>
+
       <% @book.copies.each do |copy| %>
-        <div>
-          Copy: <%= copy.location %>
+        <div class="d-flex justify-content-between align-items-center">
+          <span>Copy: <%= copy.location %></span>
+          <%= link_to book_copy_path(@book, copy),
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' } do %>
+            Delete Copy
+          <% end if current_user&.is_admin? %>
         </div>
       <% end %>
+
+      <% if current_user&.is_admin? %>
+        <p>
+          <a class="" data-toggle="collapse" href="#destroyedCopies" role="button" aria-expanded="false" aria-controls="destroyedCopies">
+            Show deleted copies
+          </a>
+        </p>
+        <div class="collapse" id="destroyedCopies">
+          <div class="card card-body">
+            <% @book.destroyed_copies.each do |copy| %>
+              <div class="d-flex justify-content-between align-items-center">
+                <span>Copy: (destroyed)</span>
+                <%= link_to restore_book_copy_path(@book, copy),
+                            method: :post,
+                            data: { confirm: 'Are you sure?' } do %>
+                  Restore Copy
+                <% end %>
+              </div>
+            <% end %>
+            <% if @book.destroyed_copies.count.zero? %>
+              No copies have been destroyed
+            <% end %>
+          </div>
+        </div>
+
+    <% end %>
     </div>
 </div>

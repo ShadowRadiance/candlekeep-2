@@ -1,0 +1,34 @@
+<%= simple_form_for(@book) do |f|  %>
+
+  <div class="row">
+    <div class="col-md-10">
+      <%= f.input :title %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :pages %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <%= f.input :author %>
+    </div>
+    <div class="col-md">
+      <%= f.input :publisher %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <%= f.input :genre %>
+    </div>
+    <div class="col-md">
+      <%= f.input :subgenre %>
+    </div>
+  </div>
+
+  <%= f.button :submit, class: 'btn-primary' %>
+  <%= link_to 'Cancel', books_path, class: 'btn btn-dark' %>
+
+<% end %>
+
