@@ -2,7 +2,32 @@
 
 Library Book Application
 
-Running on https://stark-chamber-52048.herokuapp.com/
+## Heroku
+
+Running on `https://stark-chamber-52048.herokuapp.com/`
+
+Utilizes:
+
+  - Heroku-Postgres::Database (Hobby)
+    - for data storage
+  - Papertrail (Choklad)
+    - for logging
+  - Heroku Scheduler (Standard)
+    - for scheduling a daily email
+  - SendGrid (Starter)
+    - for sending email
+
+Poke around the library as a guest, then sign up to access the library as a 
+full member! **_You will need to sign up with a real email address as the system 
+uses email-verification._** 
+
+Note: if you have a gmail account, you can create as many addresses as you 
+like using plus-addressing. If your email is `someone@gmail.com`, you can simply
+use an email address such as  `someone+whatever@gmail.com` and it will just 
+work and show up in your inbox. (Also useful for finding out who sold your 
+email address to a spammer!)
+
+Once you have signed up, you can email me for admin access.
 
 ## Development Setup
 
