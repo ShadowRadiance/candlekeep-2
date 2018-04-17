@@ -9,26 +9,21 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarUser">
-    <div class="navbar-nav">
-      <% if user_signed_in? %>
-        <span class="navbar-text">Logged in as <strong><%= current_user.email %></strong>.</span>
-        <%= link_to 'Edit profile', edit_user_registration_path, class: 'nav-item nav-link' %>
-        <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'nav-item nav-link' %>
-      <% else %>
-        <%= link_to 'Sign up', new_user_registration_path, class: 'nav-item nav-link' %>
-        <%= link_to 'Login', new_user_session_path, class: 'nav-item nav-link' %>
-      <% end %>
-    </div>
+
+      <ul class="navbar-nav d-flex justify-content-end w-100">
+        <li class="nav-item navbar-text"><%= user_nav[:time] %></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+             aria-haspopup="true" aria-expanded="false"><%= user_nav[:dropdown][:type] %></a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-item"><strong><%= user_nav[:dropdown][:name] %></strong></div>
+            <div class="dropdown-divider"></div>
+            <%= raw user_nav[:dropdown][:links].join(' ') %>
+          </div>
+        </li>
+      </ul>
+
   </div>
 
-  <!--
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="#">Features</a>
-      <a class="nav-item nav-link" href="#">Pricing</a>
-      <a class="nav-item nav-link disabled" href="#">Disabled</a>
-    </div>
-  </div>
-  -->
 </nav>
