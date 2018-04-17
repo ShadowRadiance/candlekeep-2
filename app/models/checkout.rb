@@ -7,7 +7,7 @@ class Checkout < ApplicationRecord
   belongs_to :user
 
   scope :active, -> { where(checked_in_at: nil) }
-  scope :overdue, ->(at_utc) { where('due_at > ?', at_utc) }
+  scope :overdue, ->(at_utc) { where('due_at < ?', at_utc) }
 
   before_create :set_due_date
 
