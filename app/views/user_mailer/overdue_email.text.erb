@@ -1,0 +1,16 @@
+# You have overdue books at Candlekeep. #
+
+You have the following books at Candlekeep that are currently overdue!
+
+<% @checkouts.each do |checkout| %>
+- <%= checkout.copy.book.title %>
+  - Due: <%= checkout.due_at.in_time_zone(@user.time_zone).to_s(:long) %>
+<% end %>
+
+Please return them. It would be a *shame* if we had to send the monks.
+
+Many thanks,
+
+The Seer
+
+
