@@ -11,4 +11,6 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :checkouts, only: [:index, :create, :update]
+
 end

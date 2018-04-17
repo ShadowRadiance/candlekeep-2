@@ -1,22 +1,17 @@
 class Copy < ApplicationRecord
   # destroyed_at
   belongs_to :book
-  has_many :checkouts
 
-  # faking the available scope for now since we don't have checkouts yet
-  # but it should be something like this
-  # scope :available, -> { includes(:checkouts).where(checkouts: {id: nil}) }
-  scope :available, -> { limit(5) }
+  has_many :checkouts, -> { where(checked_in_at: nil) }
 
-
+  scope :available, -> { includes(:checkouts).where(checkouts: {id: nil}) }
 
   def available?
-    true
-    # checkouts.checked_out.empty?
+    checkouts.count.zero?
   end
 
   def location
-    if Random.new.rand(0..1).zero?
+    if available?
       'in library'
     else
       'checked out'
