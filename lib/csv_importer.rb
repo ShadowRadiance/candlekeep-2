@@ -3,36 +3,30 @@ require 'csv'
 class CsvImporter
   def initialize(filename=nil)
     @filename = filename || File.join(Rails.root, 'db', 'library.csv')
+
+    reset_counts
   end
 
   def fake_import
-    # Title,Author,Genre,SubGenre,Pages,Publisher,Copies
+    # Library,Title,Author,Genre,SubGenre,Pages,Publisher,Copies
     Book.transaction do
-      existing_counts = [Book.count, Copy.count]
-      import_counts = import
-      check_import(existing_counts[0] + import_counts[0],
-                   existing_counts[1] + import_counts[1])
+      import
       raise ActiveRecord::Rollback
     end
-    puts "Import checks out OK"
-  end
-
-  def check_import(expected_books, expected_copies)
-    raise 'unexpected number of books' if Book.count != expected_books
-    raise 'unexpected number of copies' if Copy.count != expected_copies
+    puts 'Import checks out OK'
   end
 
   def import
-    imported = [0,0]
+    reset_counts
     CSV.foreach(@filename, options) do |row|
-      create_book_with_copies(book_params(row), row['Copies'])
-      imported[0] += 1
-      imported[1] += row['Copies']
+      branch = find_or_create_branch(row['Library'])
+      book = find_or_create_book(book_params(row))
+      create_copies(book, row['Copies'], branch)
     end
-    puts "Imported a total of #{imported[1]} copies" \
-           " over #{imported[0]} books"
-    imported
+    report_counts
   end
+
+  private
 
   def book_params(row)
     {
@@ -45,18 +39,27 @@ class CsvImporter
     }
   end
 
-  def create_book_with_copies(params, copies)
-    create_book(params).tap do |book|
-      create_copies(book, copies)
+  def find_or_create_branch(branch_name)
+    Branch.find_or_create_by!(name: branch_name) do
+      @branches_created += 1
     end
   end
 
-  def create_book(params)
-    Book.create(params)
+  def find_or_create_book(params)
+    book = Book.find_or_create_by(params) do
+      @books_created += 1
+    end
+    unless book.valid?
+      raise "Failed to import book with params #{params.as_json}: \n#{book.errors.full_messages.to_sentence}"
+    end
+    book
   end
 
-  def create_copies(book, copies)
-    copies.times { book.copies.create }
+  def create_copies(book, copies, branch)
+    copies.times do
+      book.copies.create!(branch: branch)
+      @copies_created += 1
+    end
   end
 
   def options
@@ -65,6 +68,19 @@ class CsvImporter
       return_headers: false,
       converters: :numeric
     }
+  end
+
+  def report_counts
+    puts 'Imported a total of ' \
+           " #{@copies_created} copies" \
+           " over #{@books_created} books" \
+           " and #{@branches_created} branches"
+  end
+
+  def reset_counts
+    @copies_created = 0
+    @books_created = 0
+    @branches_created = 0
   end
 end
 
