@@ -1,10 +1,10 @@
-# Candlekeep
+# Candlekeep Expanded
 
-Library Book Application
+Library Book Application - Multi Branch Version
 
 ## Heroku
 
-Running on `https://stark-chamber-52048.herokuapp.com/`
+Running on `<pending>`
 
 Utilizes:
 
@@ -56,7 +56,7 @@ rake importer:fake_import  # fakes importing db/library.csv file into the databa
 The CSV should have a header row as follows:
 
 ```
-Title,Author,Genre,SubGenre,Pages,Publisher,Copies
+Library,Title,Author,Genre,SubGenre,Pages,Publisher,Copies
 ```
 
 #### Potential Future Enhancements
