@@ -4,10 +4,14 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :books do
-    resources :copies, only: [:create, :destroy] do
-      member do
-        post :restore
-      end
+    resources :branches, only: [] do
+        resources :copies, only: [:create]
+    end
+  end
+
+  resources :copies, only: [:destroy] do
+    member do
+      post :restore
     end
   end
 

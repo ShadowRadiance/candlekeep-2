@@ -9,8 +9,22 @@ class Book < ApplicationRecord
   default_scope { order(author: :asc) }
 
   has_many :copies, -> { where(destroyed_at: nil) }
+  has_many :branches, through: :copies
+
   def destroyed_copies
-    Copy.where.not(destroyed_at: nil).where(book: self)
+    copies.where.not(destroyed_at: nil)
+  end
+
+  def available_copies
+    copies.available
+  end
+
+  def copies_at(branch)
+    copies.where(branch: branch)
+  end
+
+  def destroyed_copies_at(branch)
+    copies.unscoped.where(branch: branch).where.not(destroyed_at: nil)
   end
 
   validates_presence_of :title

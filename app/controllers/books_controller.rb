@@ -3,10 +3,15 @@ class BooksController < ApplicationController
   before_action :require_admin!, except: [:index, :show]
 
   def index
-    @books = Book.includes(:copies).all
+    @branches = Branch.all
+    @books = Book
+             .includes(:copies)
+             .includes(copies: :branch)
+             .all
   end
 
   def show
+    @branches = Branch.all
     @book = Book.find(params[:id])
   end
 
