@@ -1,6 +1,7 @@
 class Copy < ApplicationRecord
   # destroyed_at
   belongs_to :book
+  belongs_to :branch
 
   has_many :checkouts, -> { where(checked_in_at: nil) }
 
@@ -12,7 +13,7 @@ class Copy < ApplicationRecord
 
   def location
     if available?
-      'in library'
+      branch.name
     else
       'checked out'
     end
