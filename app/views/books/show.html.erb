@@ -8,7 +8,7 @@
       <h2>Copies</h2>
 
       <% @branches.each do |branch| %>
-        <h3><%= branch.name %></h3>
+        <h3><%= link_to branch.name, branch %></h3>
 
         <%= link_to book_branch_copies_path(@book, branch), method: :post do %>
           Add Copy
