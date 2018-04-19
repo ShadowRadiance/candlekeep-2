@@ -39,10 +39,25 @@
           <% if book.available_copies.count.zero? %>
             Out of Copies
           <% else %>
-            <%= button_to 'Borrow', checkouts_path,
-                          params: {book_id: book.id},
-                          method: :post,
-                          class: 'btn btn-primary btn-sm text-right'%>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button"
+                      data-toggle="dropdown">Borrow</button>
+              <div class="dropdown-menu">
+                <% @branches.each do |branch| %>
+                  <% if branch.carries_available_copy_of?(book) %>
+                    <%= button_to checkouts_path,
+                                method: :post,
+                                params: {book_id: book.id,
+                                         branch_id: branch.id},
+                                class: 'dropdown-item' do %>
+                      <%= branch.name %> (<%= book.copies_at(branch).available.count %>)
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+
+
           <% end %>
         </div>
       <% end %>
