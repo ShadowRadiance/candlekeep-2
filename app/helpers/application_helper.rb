@@ -46,6 +46,9 @@ module ApplicationHelper
         hsh[:dropdown][:links].unshift(
           link_to('All Checkouts', admin_index_checkouts_path, class: 'dropdown-item')
         )
+        hsh[:dropdown][:links].unshift(
+          link_to('Manage Branches', branches_path, class: 'dropdown-item')
+        )
       end
     end
   end
