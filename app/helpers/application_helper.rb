@@ -22,6 +22,11 @@ module ApplicationHelper
     end
   end
 
+  def google_map_pin_link(address)
+    addr = address.encode(universal_newline: true).tr("\n", ',').gsub(/\s+/, ' ')
+    "https://www.google.com/maps/search/?api=1&#{URI.encode_www_form(query: addr)}"
+  end
+
   private
 
   def member_nav(user)
