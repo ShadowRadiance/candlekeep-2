@@ -1,0 +1,25 @@
+<%= simple_form_for(@branch) do |f|  %>
+
+  <div class="row">
+    <div class="col-md">
+      <%= f.input :name %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <%= f.input :address, as: :text %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <%= f.input :phone_number, type: :tel %>
+    </div>
+  </div>
+
+  <%= f.button :submit, class: 'btn-primary' %>
+  <%= link_to 'Cancel', branches_path, class: 'btn btn-dark' %>
+
+<% end %>
+

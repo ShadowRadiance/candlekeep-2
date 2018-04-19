@@ -1,0 +1,35 @@
+  <h3><%= @branch.name %></h3>
+
+
+    <div class="card mb-2">
+      <div class="card-header">Address</div>
+      <div class="card-body">
+        <% if @branch.address.present? %>
+          <address>
+            <%= simple_format(@branch.address) %>
+          </address>
+          <%= link_to 'View Map', google_map_pin_link(@branch.address) %>
+        <% else %>
+          -
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Phone Number</div>
+      <div class="card-body">
+        <% if @branch.phone_number.present? %>
+          <%= link_to @branch.phone_number, "tel:#{@branch.phone_number}" %>
+        <% else %>
+          -
+        <% end %>
+      </div>
+    </div>
+
+    <% if current_user&.is_admin? %>
+      <div class="text-right">
+        <%= link_to 'Edit', edit_branch_path(@branch) %>
+        |
+        <%= link_to 'Branches', branches_path %>
+      </div>
+    <% end %>

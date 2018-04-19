@@ -5,9 +5,11 @@ Rails.application.routes.draw do
 
   resources :books do
     resources :branches, only: [] do
-        resources :copies, only: [:create]
+      resources :copies, only: [:create]
     end
   end
+
+  resources :branches, except: [:destroy]
 
   resources :copies, only: [:destroy] do
     member do

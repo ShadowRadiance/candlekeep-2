@@ -3,6 +3,7 @@ class Branch < ApplicationRecord
   has_many :copies
   has_many :books, through: :copies
 
+  validates_presence_of :name
 
   def carries_copy_of?(book)
     copies_of(book).count.positive?
