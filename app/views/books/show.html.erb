@@ -6,48 +6,54 @@
 
     <div class="col-md-6">
       <h2>Copies</h2>
-      <%= link_to book_copies_path(@book), method: :post do %>
-        Add Copy
-      <% end if current_user&.is_admin? %>
 
-      <% @book.copies.each do |copy| %>
-        <div class="d-flex justify-content-between align-items-center">
-          <span>
-            Copy: <%= copy_location(copy, current_user) %>
-          </span>
-          <%= link_to book_copy_path(@book, copy),
-                      method: :delete,
-                      data: { confirm: 'Are you sure?' } do %>
-            Delete Copy
-          <% end if current_user&.is_admin? %>
-        </div>
-      <% end %>
+      <% @branches.each do |branch| %>
+        <h3><%= branch.name %></h3>
 
-      <% if current_user&.is_admin? %>
-        <p>
-          <a class="" data-toggle="collapse" href="#destroyedCopies" role="button" aria-expanded="false" aria-controls="destroyedCopies">
-            Show deleted copies
-          </a>
-        </p>
-        <div class="collapse" id="destroyedCopies">
-          <div class="card card-body">
-            <% @book.destroyed_copies.each do |copy| %>
-              <div class="d-flex justify-content-between align-items-center">
-                <span>Copy: (destroyed)</span>
-                <%= link_to restore_book_copy_path(@book, copy),
-                            method: :post,
-                            data: { confirm: 'Are you sure?' } do %>
-                  Restore Copy
-                <% end %>
-              </div>
-            <% end %>
-            <% if @book.destroyed_copies.count.zero? %>
-              No copies have been destroyed
-            <% end %>
+        <%= link_to book_branch_copies_path(@book, branch), method: :post do %>
+          Add Copy
+        <% end if current_user&.is_admin? %>
+
+        <% branch.copies_of(@book).each do |copy| %>
+          <div class="d-flex justify-content-between align-items-center">
+            <span>
+              Copy: <%= copy_location(copy, current_user) %>
+            </span>
+            <%= link_to copy_path(@book, branch, copy),
+                        method: :delete,
+                        data: { confirm: 'Are you sure?' } do %>
+              Delete Copy
+            <% end if current_user&.is_admin? %>
           </div>
-        </div>
+        <% end %>
 
-    <% end %>
+        <% if current_user&.is_admin? %>
+          <p>
+            <a class="" data-toggle="collapse" href="#destroyedCopies_<%= branch.id %>" role="button" aria-expanded="false" aria-controls="destroyedCopies">
+              Show deleted copies
+            </a>
+          </p>
+          <div class="collapse" id="destroyedCopies_<%= branch.id %>">
+            <div class="card card-body">
+              <% @book.destroyed_copies_at(branch).each do |copy| %>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>Copy: (destroyed)</span>
+                  <%= link_to restore_copy_path(copy),
+                              method: :post,
+                              data: { confirm: 'Are you sure?' } do %>
+                    Restore Copy
+                  <% end %>
+                </div>
+              <% end %>
+              <% if @book.destroyed_copies_at(branch).count.zero? %>
+                No copies have been destroyed
+              <% end %>
+            </div>
+          </div>
+
+        <% end %>
+
+      <% end %>
     </div>
 </div>
 

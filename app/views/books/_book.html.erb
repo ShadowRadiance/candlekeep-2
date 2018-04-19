@@ -9,26 +9,34 @@
         <%= book.title %>
 
         <span class="badge badge-dark badge-pill">
-          <%= book.copies.available.count %>
+          <%= book.available_copies.count %>
           /
           <%= pluralize(book.copies.count, 'copy') %>
         </span>
 
       <% end %>
 
-      <p class="text-muted"><%= book.author.blank? ? 'Author Unknown' : book.author %></p>
+      <p class="text-muted">
+        <%= book.author.blank? ? 'Author Unknown' : book.author %>
+      </p>
 
       <% if mode==:display %>
-        <p class="card-text">Published by <%= book.publisher.blank? ? '(Unknown)' : book.publisher %></p>
+        <p class="card-text">
+          Published by <%= book.publisher.blank? ? '(Unknown)' : book.publisher %>
+        </p>
 
-        <p class="card-text"><%= book.genre.titleize %> <%= wrap_parens(book.subgenre) %></p>
+        <p class="card-text">
+          <%= book.genre.titleize %> <%= wrap_parens(book.subgenre) %>
+        </p>
 
-        <p class="card-text"><%= book.pages %> pages</p>
+        <p class="card-text">
+          <%= book.pages %> pages
+        </p>
       <% end %>
 
       <% unless current_user.nil? %>
         <div class="text-right">
-          <% if book.copies.available.count.zero? %>
+          <% if book.available_copies.count.zero? %>
             Out of Copies
           <% else %>
             <%= button_to 'Borrow', checkouts_path,
