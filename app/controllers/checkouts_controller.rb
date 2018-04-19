@@ -23,7 +23,8 @@ class CheckoutsController < ApplicationController
 
   def create
     book = Book.find(params[:book_id])
-    checkout_copy(acquire_copy(book))
+    branch = Branch.find(params[:branch_id])
+    checkout_copy(acquire_copy(book,branch))
     redirect_back fallback_location: books_path, notice: 'Checkout successful'
   rescue StandardError => e
     redirect_back fallback_location: books_path, alert: e.message
@@ -41,8 +42,8 @@ class CheckoutsController < ApplicationController
 
   private
 
-  def acquire_copy(book)
-    book.copies.available.first.tap do |copy|
+  def acquire_copy(book, branch)
+    book.copies_at(branch).available.first.tap do |copy|
       raise('No Copies Available') if copy.nil?
     end
   end
