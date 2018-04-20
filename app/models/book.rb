@@ -12,11 +12,15 @@ class Book < ApplicationRecord
   has_many :branches, through: :copies
 
   def destroyed_copies
-    copies.where.not(destroyed_at: nil)
+    copies.unscoped.where.not(destroyed_at: nil)
   end
 
   def available_copies
     copies.available
+  end
+
+  def available_copies_at(branch)
+    available_copies.where(branch: branch)
   end
 
   def copies_at(branch)
@@ -24,7 +28,7 @@ class Book < ApplicationRecord
   end
 
   def destroyed_copies_at(branch)
-    copies.unscoped.where(branch: branch).where.not(destroyed_at: nil)
+    destroyed_copies.where(branch: branch)
   end
 
   validates_presence_of :title

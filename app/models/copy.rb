@@ -4,12 +4,12 @@ class Copy < ApplicationRecord
   belongs_to :branch
   belongs_to :checked_out_by, class_name: 'User', optional: true
 
+  scope :available, -> { where.not(checked_out_by: nil) }
 
-  scope :available, -> { includes(:checkouts).where(checkouts: {id: nil}) }
   before_validation :set_due_date
 
   def available?
-    checkouts.count.zero?
+    checked_out_by.nil?
   end
 
   def location
@@ -21,7 +21,7 @@ class Copy < ApplicationRecord
   end
 
   def current_borrower
-    checkouts.first&.user
+    checked_out_by
   end
 
   private
