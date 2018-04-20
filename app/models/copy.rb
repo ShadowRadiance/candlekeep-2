@@ -2,6 +2,7 @@ class Copy < ApplicationRecord
   # destroyed_at
   belongs_to :book
   belongs_to :branch
+  belongs_to :checked_out_by, class_name: 'User', optional: true
 
   has_many :checkouts, -> { where(checked_in_at: nil) }
 
