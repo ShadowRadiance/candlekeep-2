@@ -37,7 +37,16 @@
       <% unless current_user.nil? %>
         <div class="text-right">
           <% if book.available_copies.count.zero? %>
-            Out of Copies
+
+            Out of Copies (
+            <% if current_user.notification_pending_for?(book) %>
+              Notification Pending
+            <% else %>
+              <%= link_to 'Notify me when available', book_notification_requests_path(book), method: :post %>
+            <% end %>
+            )
+
+
           <% else %>
             <div class="dropdown">
               <button class="btn btn-primary dropdown-toggle" type="button"
