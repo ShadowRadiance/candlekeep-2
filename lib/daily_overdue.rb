@@ -28,7 +28,7 @@ class DailyOverdue
       end
     end
 
-    [overdue_checkouts_by_user.count - failed, failed]
+    [overdue_checkouts_by_user.size - failed, failed]
   end
 
 end

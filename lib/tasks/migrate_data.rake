@@ -4,7 +4,7 @@ namespace :migrate_data do
 
     checkouts = Checkout.includes(:copy).active
 
-    puts "Moving #{checkouts.count} active checkouts to the related copy"
+    puts "Moving #{checkouts.size} active checkouts to the related copy"
 
     ActiveRecord::Base.transaction do
       checkouts.each do |checkout|

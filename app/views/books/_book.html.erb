@@ -46,11 +46,9 @@
             <% end %>
             )
 
-
           <% else %>
             <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button"
-                      data-toggle="dropdown">Borrow</button>
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Borrow</button>
               <div class="dropdown-menu">
                 <% @branches.each do |branch| %>
                   <% if branch.carries_available_copy_of?(book) %>

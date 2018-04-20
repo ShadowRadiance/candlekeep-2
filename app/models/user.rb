@@ -20,7 +20,7 @@ class User < ApplicationRecord
   scope :admins, -> { where(is_admin: true) }
 
   def ensure_admin
-    User.first&.make_admin if User.admins.count.zero?
+    User.first&.make_admin if User.admins.size.zero?
   end
 
   def make_admin
@@ -28,6 +28,6 @@ class User < ApplicationRecord
   end
 
   def notification_pending_for?(book)
-    notification_requests.where(book: book).count.positive?
+    notification_requests.where(book: book).size.positive?
   end
 end

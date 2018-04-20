@@ -6,11 +6,11 @@ class Branch < ApplicationRecord
   validates_presence_of :name
 
   def carries_copy_of?(book)
-    copies_of(book).count.positive?
+    copies_of(book).size.positive?
   end
 
   def carries_available_copy_of?(book)
-    available_copies_of(book).count.positive?
+    available_copies_of(book).size.positive?
   end
 
   def copies_of(book)
