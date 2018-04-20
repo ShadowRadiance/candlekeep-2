@@ -6,10 +6,7 @@ class BooksController < ApplicationController
   before_action :set_branches, only: [:index, :show]
 
   def index
-    @books = Book
-             .includes(:copies)
-             .includes(copies: :branch)
-             .all
+    @books = Book.includes(copies: [:branch]).all
   end
 
   def show; end
@@ -45,7 +42,7 @@ class BooksController < ApplicationController
   private
 
   def set_book
-    @book = Book.find(params[:id])
+    @book = Book.includes(copies: [:branch]).find(params[:id])
   end
 
   def set_branches
