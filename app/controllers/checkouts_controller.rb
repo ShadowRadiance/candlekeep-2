@@ -67,6 +67,7 @@ class CheckoutsController < ApplicationController
       checkout.update(checked_in_at: checkin_time)
       raise checkout.errors.full_messages.to_sentence unless checkout.valid?
 
+      copy = checkout.copy
       copy.update(checked_out_at: nil,
                   checked_out_by: nil)
       raise copy.errors.full_messages.to_sentence unless copy.valid?
