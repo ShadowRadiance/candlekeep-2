@@ -4,9 +4,16 @@ class Copy < ApplicationRecord
   belongs_to :branch
   belongs_to :checked_out_by, class_name: 'User', optional: true
 
-  scope :available, -> { where.not(checked_out_by: nil) }
+  scope :active, -> { where(destroyed_at: nil) }
+  scope :inactive, -> { where.not(destroyed_at: nil) }
+
+  scope :available, -> { active.where(checked_out_by: nil) }
 
   before_validation :set_due_date
+
+  def active?
+    destroyed_at.nil?
+  end
 
   def available?
     checked_out_by.nil?

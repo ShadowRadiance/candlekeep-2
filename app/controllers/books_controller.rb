@@ -7,9 +7,12 @@ class BooksController < ApplicationController
 
   def index
     @books = Book.includes(copies: [:branch]).all
+    @books.each(&:generate_count_caches)
   end
 
-  def show; end
+  def show
+    @book.generate_count_caches
+  end
 
   def new
     @book = Book.new(pages: 0)
