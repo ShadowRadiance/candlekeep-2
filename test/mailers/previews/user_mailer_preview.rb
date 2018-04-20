@@ -4,4 +4,10 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user: User.first,
                     checkouts: Checkout.take(5)).overdue_email
   end
+
+  def notification_email
+    notification = NotificationRequest.new(user: User.first,
+                                           book: Book.first)
+    UserMailer.with(notification_request: notification).notification_email
+  end
 end

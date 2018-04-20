@@ -1,0 +1,18 @@
+<h1>Candlekeep</h1>
+
+<p>You asked us to notify you when a book came back into the library.</p>
+
+<p>The following book is now available:</p>
+
+<p><%= @notification_request.book.title %></p>
+
+<p>Hurry back to Candlekeep Library to check it out before it's gone!</p>
+
+<p>Click to jump right to your book:</p>
+
+<p><%= link_to @notification_request.book.title, @notification_request.book %></p>
+
+<p>Many thanks,</p>
+
+<p>The Seer</p>
+
