@@ -12,6 +12,7 @@ class User < ApplicationRecord
          :validatable
 
   has_many :checkouts
+  has_many :notification_requests
 
   # after create/update/delete ensure there is always an admin
   after_commit :ensure_admin
@@ -24,5 +25,9 @@ class User < ApplicationRecord
 
   def make_admin
     update_attribute(:is_admin, true)
+  end
+
+  def notification_pending_for?(book)
+    notification_requests.where(book: book).count.positive?
   end
 end

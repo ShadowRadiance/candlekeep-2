@@ -34,6 +34,7 @@ class CheckoutsController < ApplicationController
     checkout = Checkout.find(params[:id])
     checkout.update(checked_in_at: Time.current)
     if checkout.valid?
+      notify_waiting_members(checkout.copy.book)
       redirect_back fallback_location: checkouts_path, notice: 'Thanks for returning the book'
     else
       redirect_back fallback_location: checkouts_path, alert: checkout.errors.full_messages.to_sentence
@@ -55,5 +56,11 @@ class CheckoutsController < ApplicationController
                                checked_out_at: checkout_time)
     raise checkout.errors.full_messages.to_sentence unless checkout.valid?
     checkout
+  end
+
+  def notify_waiting_members(book)
+    NotificationRequest.where(book: book).each do |req|
+      UserMailer.with(notification_request: req).notification_email.deliver_now
+    end
   end
 end

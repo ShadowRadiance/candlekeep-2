@@ -1,0 +1,18 @@
+# Candlekeep
+
+You asked us to notify you when a book came back into the library.
+
+The following book is now available:
+
+  <%= @notification_request.book.title %>
+
+Hurry back to Candlekeep Library to check it out before it's gone!
+
+Click to jump right to your book:
+
+<%= url_for @notification_request.book %>
+
+Many thanks,
+
+The Seer
+

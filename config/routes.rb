@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :books do
+    resources :notification_requests, only: [:create]
     resources :branches, only: [] do
       resources :copies, only: [:create]
     end
