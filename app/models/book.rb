@@ -8,23 +8,54 @@ class Book < ApplicationRecord
 
   default_scope { order(author: :asc) }
 
-  has_many :copies, -> { where(destroyed_at: nil) }
+  has_many :copies
   has_many :branches, through: :copies
 
+  def undestroyed_copies
+    copies.active
+  end
+
   def destroyed_copies
-    copies.where.not(destroyed_at: nil)
+    copies.inactive
   end
 
   def available_copies
     copies.available
   end
 
+  def available_copies_at(branch)
+    available_copies.where(branch: branch)
+  end
+
   def copies_at(branch)
-    copies.where(branch: branch)
+    undestroyed_copies.where(branch: branch)
   end
 
   def destroyed_copies_at(branch)
-    copies.unscoped.where(branch: branch).where.not(destroyed_at: nil)
+    destroyed_copies.where(branch: branch)
+  end
+
+  def generate_count_caches
+    copies_array = copies.to_a
+    active_copies_array = copies_array.select(&:active?)
+    available_copies_array = active_copies_array.select(&:available?)
+    @max_copy_count = active_copies_array.size
+    @available_copy_count = available_copies_array.size
+
+    av_by_branch_id = available_copies_array.group_by { |copy| copy.branch.id }
+    @available_copy_count_by_branch_id = Hash.new(0)
+    av_by_branch_id.each do |id, copies|
+      @available_copy_count_by_branch_id[id] = copies.size
+    end
+  end
+  def cached_available_copy_count_at(branch)
+    @available_copy_count_by_branch_id[branch.id]
+  end
+  def cached_available_copy_count
+    @available_copy_count
+  end
+  def cached_max_copy_count
+    @max_copy_count
   end
 
   validates_presence_of :title

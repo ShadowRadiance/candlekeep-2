@@ -9,9 +9,9 @@
         <%= book.title %>
 
         <span class="badge badge-dark badge-pill">
-          <%= book.available_copies.count %>
+          <%= book.cached_available_copy_count %>
           /
-          <%= pluralize(book.copies.count, 'copy') %>
+          <%= pluralize(book.cached_max_copy_count, 'copy') %>
         </span>
 
       <% end %>
@@ -36,7 +36,7 @@
 
       <% unless current_user.nil? %>
         <div class="text-right">
-          <% if book.available_copies.count.zero? %>
+          <% if book.cached_available_copy_count.zero? %>
 
             Out of Copies (
             <% if current_user.notification_pending_for?(book) %>
@@ -46,20 +46,19 @@
             <% end %>
             )
 
-
           <% else %>
             <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button"
-                      data-toggle="dropdown">Borrow</button>
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Borrow</button>
               <div class="dropdown-menu">
                 <% @branches.each do |branch| %>
-                  <% if branch.carries_available_copy_of?(book) %>
+                  <% if book.cached_available_copy_count_at(branch).positive? %>
                     <%= button_to checkouts_path,
                                 method: :post,
                                 params: {book_id: book.id,
                                          branch_id: branch.id},
                                 class: 'dropdown-item' do %>
-                      <%= branch.name %> (<%= book.copies_at(branch).available.count %>)
+                      <%= branch.name %>
+                      (<%= book.cached_available_copy_count_at(branch) %>)
                     <% end %>
                   <% end %>
                 <% end %>

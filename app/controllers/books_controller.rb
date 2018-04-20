@@ -2,17 +2,16 @@ class BooksController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :require_admin!, except: [:index, :show]
 
+  before_action :set_book, only: [:show, :edit, :update]
+  before_action :set_branches, only: [:index, :show]
+
   def index
-    @branches = Branch.all
-    @books = Book
-             .includes(:copies)
-             .includes(copies: :branch)
-             .all
+    @books = Book.includes(copies: [:branch]).all
+    @books.each(&:generate_count_caches)
   end
 
   def show
-    @branches = Branch.all
-    @book = Book.find(params[:id])
+    @book.generate_count_caches
   end
 
   def new
@@ -31,15 +30,10 @@ class BooksController < ApplicationController
 
   end
 
-  def edit
-    @book = Book.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @book = Book.find(params[:id])
-    @book.assign_attributes(book_params)
-
-    if @book.save
+    if @book.update(book_params)
       redirect_to @book, notice: 'Book updated successfully.'
     else
       flash.now[:error] = 'Could not save book'
@@ -48,17 +42,19 @@ class BooksController < ApplicationController
 
   end
 
-  def delete
-    @book = Book.find(params[:id])
+  private
 
+  def set_book
+    @book = Book.includes(copies: [:branch]).find(params[:id])
   end
 
-  private
+  def set_branches
+    @branches = Branch.all
+  end
 
   def book_params
     params.require(:book).permit(:title, :author,
                                  :genre, :subgenre,
                                  :pages, :publisher)
   end
-
 end

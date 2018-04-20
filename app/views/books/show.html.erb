@@ -45,7 +45,7 @@
                   <% end %>
                 </div>
               <% end %>
-              <% if @book.destroyed_copies_at(branch).count.zero? %>
+              <% if @book.destroyed_copies_at(branch).size.zero? %>
                 No copies have been destroyed
               <% end %>
             </div>

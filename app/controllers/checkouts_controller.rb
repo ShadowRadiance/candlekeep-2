@@ -32,13 +32,11 @@ class CheckoutsController < ApplicationController
 
   def destroy
     checkout = Checkout.find(params[:id])
-    checkout.update(checked_in_at: Time.current)
-    if checkout.valid?
-      notify_waiting_members(checkout.copy.book)
-      redirect_back fallback_location: checkouts_path, notice: 'Thanks for returning the book'
-    else
-      redirect_back fallback_location: checkouts_path, alert: checkout.errors.full_messages.to_sentence
-    end
+    checkin(checkout)
+    notify_waiting_members(checkout.copy.book)
+    redirect_back fallback_location: checkouts_path, notice: 'Thanks for returning the book'
+  rescue StandardError => e
+    redirect_back fallback_location: checkouts_path, alert: e.message
   end
 
   private
@@ -51,11 +49,29 @@ class CheckoutsController < ApplicationController
 
   def checkout_copy(copy)
     checkout_time = Time.current
-    checkout = Checkout.create(copy: copy,
-                               user: current_user,
-                               checked_out_at: checkout_time)
-    raise checkout.errors.full_messages.to_sentence unless checkout.valid?
-    checkout
+    ActiveRecord::Base.transaction do
+      checkout = Checkout.create(copy: copy,
+                                 user: current_user,
+                                 checked_out_at: checkout_time)
+      raise checkout.errors.full_messages.to_sentence unless checkout.valid?
+
+      copy.update(checked_out_at: checkout_time,
+                  checked_out_by: current_user)
+      raise copy.errors.full_messages.to_sentence unless copy.valid?
+    end
+  end
+
+  def checkin(checkout)
+    checkin_time = Time.current
+    ActiveRecord::Base.transaction do
+      checkout.update(checked_in_at: checkin_time)
+      raise checkout.errors.full_messages.to_sentence unless checkout.valid?
+
+      copy = checkout.copy
+      copy.update(checked_out_at: nil,
+                  checked_out_by: nil)
+      raise copy.errors.full_messages.to_sentence unless copy.valid?
+    end
   end
 
   def notify_waiting_members(book)

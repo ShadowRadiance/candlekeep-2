@@ -2,13 +2,21 @@ class Copy < ApplicationRecord
   # destroyed_at
   belongs_to :book
   belongs_to :branch
+  belongs_to :checked_out_by, class_name: 'User', optional: true
 
-  has_many :checkouts, -> { where(checked_in_at: nil) }
+  scope :active, -> { where(destroyed_at: nil) }
+  scope :inactive, -> { where.not(destroyed_at: nil) }
 
-  scope :available, -> { includes(:checkouts).where(checkouts: {id: nil}) }
+  scope :available, -> { active.where(checked_out_by: nil) }
+
+  before_validation :set_due_date
+
+  def active?
+    destroyed_at.nil?
+  end
 
   def available?
-    checkouts.count.zero?
+    checked_out_by.nil?
   end
 
   def location
@@ -20,6 +28,18 @@ class Copy < ApplicationRecord
   end
 
   def current_borrower
-    checkouts.first&.user
+    checked_out_by
+  end
+
+  private
+
+  def set_due_date
+    if checked_out_at.nil?
+      self.due_at = nil
+    else
+      # book must be returned one week after checkout date
+      local_checkout = checked_out_at.in_time_zone(checked_out_by.time_zone)
+      self.due_at = local_checkout.end_of_day + 1.week
+    end
   end
 end
